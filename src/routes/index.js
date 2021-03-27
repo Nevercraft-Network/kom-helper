@@ -9,4 +9,8 @@ app.get('/', (req, res) => {
   res.json('Hello!')
 })
 
+const invite = require('./invite')
+
+app.use('/invite', invite)
+
 module.exports = app
