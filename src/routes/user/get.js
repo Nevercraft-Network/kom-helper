@@ -1,15 +1,15 @@
 const client = require('../../../utils/bot/client')
 const express = require('express')
+const config = require('../../config')
 const router = express.Router()
 
 router.get('/', async (req, res) => {
   const { userId } = req.query
-  console.log(userId)
-  const guild = await client.guilds.fetch('667412102964838400')
-  if (userId === undefined || userId === '') return res.status(400).json({ error: 'missing data' })
+  const guild = await client.guilds.fetch(config.serverId)
+  if (userId === undefined || userId === '') return res.status(400).json({ status: 'missing data' })
   await client.users.fetch(userId)
     .then(async User => {
-      if (User === undefined) return res.status(500).json({ error: 'invalid userID' })
+      if (User === undefined) return res.status(500).json({ status: 'invalid userID' })
       await guild.members.fetch(User)
         .then(() => {
           return res.json({ status: true })
