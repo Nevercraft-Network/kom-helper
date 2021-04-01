@@ -1,5 +1,6 @@
 const express = require('express')
 const client = require('../utils/bot/client')
+const config = require('./config')
 require('dotenv').config()
 
 const app = express()
@@ -13,4 +14,4 @@ client.on('ready', async () => {
   console.log('Bot is running!')
 })
 
-app.listen(process.env.PORT, '0.0.0.0', () => { console.log('API is running!') })
+app.listen(config.port, '0.0.0.0', () => { console.log('API is running on port ' + config.port + '!') })
