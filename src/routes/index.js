@@ -9,10 +9,10 @@ app.get('/', (req, res) => {
   res.json('Hello!')
 })
 
-const invite = require('./invite')
 const user = require('./user')
+const task = require('./task')
 
-app.use('/invite', invite)
 app.use('/user', user)
+app.use('/task', task)
 
 module.exports = app
