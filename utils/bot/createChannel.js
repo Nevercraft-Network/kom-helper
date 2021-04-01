@@ -1,23 +1,30 @@
 const client = require('./client')
 
-const defaultParams = {}
+async function category (serverID, name, options = {}) {
+  const defaultParams = {}
+  const type = 'category'
 
-async function category (serverID, name) {
+  Object.assign(defaultParams, { type: type })
+
+  if (options.hasOwnProperty('permission')) {
+    Object.assign(defaultParams, { permissionOverwrites: options.permission })
+  }
+
   let createdChannel = ''
   await client.guilds.fetch(serverID)
     .then(async guild => {
-      createdChannel = await guild.channels.create(name, { type: 'category' })
+      createdChannel = await guild.channels.create(name, defaultParams)
     })
     .catch(err => {
       if (err) {
         console.log({ error: err.message })
-        throw new Error(err.message)
       }
     })
   return createdChannel
 }
 
 async function voice (serverID, name, options = {}) {
+  const defaultParams = {}
   const type = 'voice'
 
   Object.assign(defaultParams, { type: type })
@@ -40,13 +47,13 @@ async function voice (serverID, name, options = {}) {
     .catch(err => {
       if (err) {
         console.log({ error: err.message })
-        throw new Error(err.message)
       }
     })
   return createdChannel
 }
 
 async function text (serverID, name, options = {}) {
+  const defaultParams = {}
   const type = 'text'
 
   Object.assign(defaultParams, { type: type })
@@ -66,7 +73,6 @@ async function text (serverID, name, options = {}) {
     .catch(err => {
       if (err) {
         console.log({ error: err.message })
-        throw new Error(err.message)
       }
     })
   return createdChannel
