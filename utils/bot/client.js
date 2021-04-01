@@ -1,9 +1,8 @@
 const Discord = require('discord.js')
+const config = require('../../src/config')
+
 const client = new Discord.Client()
-const dotenv = require('dotenv')
 
-dotenv.config()
-
-client.login(process.env.DISCORD_TOKEN)
+client.login(config.discordToken)
 
 module.exports = client
