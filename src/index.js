@@ -13,6 +13,10 @@ const routes = require('./routes')
 
 app.use('/v1', routes)
 
+function sleep (ms) {
+  return new Promise(resolve => setTimeout(resolve, ms))
+}
+
 client.on('ready', async () => {
   client.user.setActivity('seus pedidos de ajuda!', { type: 'LISTENING' })
   console.log('Bot is running!')
@@ -31,7 +35,7 @@ client.on('message', async (message) => {
     else {
       const categoryId = messageArray[1]
       await client.channels.fetch(categoryId)
-        .then(category => {
+        .then(async category => {
           if (category.type !== 'category') return temporaryMessage(message, ':x:  Você precisa informar o ID de uma categoria!')
           else {
             category.permissionOverwrites.forEach(async role => {
@@ -39,9 +43,12 @@ client.on('message', async (message) => {
               const fetchRole = await guild.roles.fetch(role.id)
               if (fetchRole.name === category.name) fetchRole.delete()
             })
-            category.children.forEach(channel => {
+            await sleep(1000)
+            category.children.forEach(async channel => {
               channel.delete(channel.id)
+              await sleep(500)
             })
+            await sleep(1000)
             category.delete()
             return temporaryMessage(message, ':white_check_mark:  Categoria, canais e cargos deletados!')
           }
