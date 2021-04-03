@@ -9,10 +9,12 @@ app.get('/', (req, res) => {
   res.json('Hello!')
 })
 
-const user = require('./user')
+const role = require('./role')
 const task = require('./task')
+const user = require('./user')
 
-app.use('/user', user)
+app.use('/role', role)
 app.use('/task', task)
+app.use('/user', user)
 
 module.exports = app

@@ -26,7 +26,17 @@ router.post('/', async (req, res) => {
         }]
       })
         .then(category => {
-          createChannel.text(serverId, 'avisos', { parent: category.id, permission: [{ id: role.id, allow: ['VIEW_CHANNEL', 'READ_MESSAGE_HISTORY'], deny: ['SEND_MESSAGES'] }] })
+          createChannel.text(serverId, 'avisos', {
+            parent: category.id,
+            permission: [{
+              id: role.id,
+              allow: [
+                'VIEW_CHANNEL',
+                'READ_MESSAGE_HISTORY'
+              ],
+              deny: ['SEND_MESSAGES']
+            }]
+          })
           createChannel.text(serverId, 'geral', { parent: category.id })
           createChannel.voice(serverId, 'voz', { parent: category.id })
           return res.json({ status: true })
