@@ -1,4 +1,5 @@
 const express = require('express')
+const sleep = require('../utils/sleep')
 const client = require('../utils/bot/client')
 const fetchGuild = require('../utils/bot/guild')
 const { temporaryMessage } = require('../utils/bot/sendMessage')
@@ -12,10 +13,6 @@ const app = express()
 const routes = require('./routes')
 
 app.use('/v1', routes)
-
-function sleep (ms) {
-  return new Promise(resolve => setTimeout(resolve, ms))
-}
 
 client.on('ready', async () => {
   client.user.setActivity('seus pedidos de ajuda!', { type: 'LISTENING' })
