@@ -11,10 +11,12 @@ app.get('/', (req, res) => {
 
 const role = require('./role')
 const task = require('./task')
+const test = require('./test')
 const user = require('./user')
 
 app.use('/role', role)
 app.use('/task', task)
+app.use('/test', test)
 app.use('/user', user)
 
 module.exports = app
