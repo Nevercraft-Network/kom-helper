@@ -10,4 +10,4 @@ async function createRole (serverId, roleName) {
   return role
 }
 
-exports.default = createRole
+module.exports = createRole
