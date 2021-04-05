@@ -6,7 +6,7 @@ const config = require('../../config')
 
 router.post('/', async (req, res) => {
   const { userId, userName, taskName, taskUrl } = req.body
-  if (await isEmpty([userId, userName, taskName])) return res.status(400).json({ status: 'missing data' })
+  if (await isEmpty([userId, userName, taskName, taskUrl])) return res.status(400).json({ status: 'missing data' })
 
   const user = await client.users.fetch(userId)
   client.channels.cache.get(config.notifyChannel)
