@@ -1,10 +1,12 @@
 const client = require('../../../utils/bot/client')
 const express = require('express')
 const config = require('../../config')
+const { isEmpty } = require('../../../utils/verifier')
 const router = express.Router()
 
 router.get('/', async (req, res) => {
   const { userId } = req.query
+  if (await isEmpty([userId])) return res.status(400).json({ status: 'missing data' })
   const guild = await client.guilds.fetch(config.serverId)
   if (userId === undefined || userId === '') return res.status(400).json({ status: 'missing data' })
   await client.users.fetch(userId)

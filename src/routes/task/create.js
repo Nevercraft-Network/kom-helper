@@ -1,14 +1,15 @@
 const createChannel = require('../../../utils/bot/createChannel')
-const { default: createRole } = require('../../../utils/bot/createRole')
+const createRole = require('../../../utils/bot/createRole')
 const express = require('express')
 const router = express.Router()
 const config = require('../../config')
+const { isEmpty } = require('../../../utils/verifier')
 
 const serverId = config.serverId
 
 router.post('/', async (req, res) => {
   const { taskName } = req.body
-  if (taskName === undefined || taskName === '') return res.status(400).json({ status: 'missing data' })
+  if (await isEmpty([taskName])) return res.status(400).json({ status: 'missing data' })
   createRole(serverId, taskName)
     .then(async role => {
       createChannel.category(serverId, taskName, {
