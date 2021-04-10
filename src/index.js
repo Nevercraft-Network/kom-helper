@@ -61,7 +61,6 @@ client.on('message', async (message) => {
 
 client.on('guildMemberAdd', async (member) => {
   const memberId = member.id
-  console.log(memberId)
   knex('task_volunteers')
     .join('users', 'task_volunteers.user_id', 'users.id')
     .where({ approved: true, discord_id: memberId })
@@ -72,14 +71,12 @@ client.on('guildMemberAdd', async (member) => {
           .where({ id: volunteer.task_id })
           .select('name')
           .from('tasks')
-          .then(task => {
-            console.log(memberId)
-            console.log(task[0].name)
+          .then(async task => {
             axios.post('https://kom-helper-dev.herokuapp.com/v1/role', {
               userId: memberId,
               taskName: task[0].name
             })
-              .then(() => { console.log('request done') })
+            await sleep(300)
               .catch(error => { console.log(error.message) })
           })
       })
