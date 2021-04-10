@@ -61,7 +61,7 @@ client.on('message', async (message) => {
 
 client.on('guildMemberAdd', async (member) => {
   const memberId = member.id
-  // console.log(memberId)
+  console.log(memberId)
   knex
     .where({ approved: true, user_id: memberId })
     .select('*')
