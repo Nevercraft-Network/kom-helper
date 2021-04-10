@@ -72,7 +72,7 @@ client.on('guildMemberAdd', async (member) => {
           .select('name')
           .from('tasks')
           .then(task => {
-            axios.post('https://kom-helper-dev.herokuapp.com/', {
+            axios.post('https://kom-helper-dev.herokuapp.com/v1/role', {
               userId: memberId,
               taskName: task[0].name
             })
