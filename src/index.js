@@ -75,7 +75,7 @@ client.on('guildMemberAdd', async (member) => {
           .then(task => {
             console.log(memberId)
             console.log(task[0].name)
-            axios.post('http://localhost:3000/v1/role', {
+            axios.post('https://kom-helper-dev.herokuapp.com/v1/role', {
               userId: memberId,
               taskName: task[0].name
             })
