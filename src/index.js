@@ -11,6 +11,8 @@ const prefix = config.prefix
 const app = express()
 
 const routes = require('./routes')
+const knex = require('./database/knex')
+const axios = require('axios')
 
 app.use('/v1', routes)
 
@@ -55,6 +57,30 @@ client.on('message', async (message) => {
         })
     }
   }
+})
+
+client.on('guildMemberAdd', async (member) => {
+  const memberId = member.id
+  knex
+    .where({ approved: true, user_id: memberId })
+    .select('*')
+    .from('task_volunteers')
+    .then(volunteers => {
+      volunteers.forEach(volunteer => {
+        knex
+          .where({ id: volunteer.task_id })
+          .select('name')
+          .from('tasks')
+          .then(task => {
+            axios.post('https://kom-helper-dev.herokuapp.com/', {
+              userId: memberId,
+              taskName: task[0].name
+            })
+              .then(() => { })
+              .catch(error => { console.lof(error.message) })
+          })
+      })
+    })
 })
 
 app.listen(config.port, '0.0.0.0', () => { console.log('API is running on port ' + config.port + '!') })
