@@ -62,10 +62,10 @@ client.on('message', async (message) => {
 client.on('guildMemberAdd', async (member) => {
   const memberId = member.id
   console.log(memberId)
-  knex
-    .where({ approved: true, user_id: memberId })
+  knex('task_volunteers')
+    .join('users', 'task_volunteers.user_id', 'users.id')
+    .where({ approved: true, discord_id: memberId })
     .select('*')
-    .from('task_volunteers')
     .then(volunteers => {
       volunteers.forEach(volunteer => {
         knex
