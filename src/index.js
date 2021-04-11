@@ -14,6 +14,10 @@ const routes = require('./routes')
 const knex = require('./database/knex')
 const axios = require('axios')
 
+app.get('/', (req, res) => {
+  res.json('Hello!')
+})
+
 app.use('/v1', routes)
 
 client.on('ready', async () => {

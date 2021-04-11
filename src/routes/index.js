@@ -9,6 +9,10 @@ app.get('/', (req, res) => {
   res.json('Hello!')
 })
 
+app.get('/wakeup', (req, res) => {
+  res.json('Hello!')
+})
+
 const role = require('./role')
 const task = require('./task')
 const test = require('./test')
