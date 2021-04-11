@@ -18,7 +18,7 @@ app.get('/', (req, res) => {
   res.json('Hello!')
 })
 
-app.use('/v1', routes)
+app.use('/', routes)
 
 client.on('ready', async () => {
   client.user.setActivity('seus pedidos de ajuda!', { type: 'LISTENING' })
