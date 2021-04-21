@@ -4,53 +4,31 @@ const express = require('express')
 const router = express.Router()
 const config = require('../../config')
 const { isEmpty } = require('../../../utils/verifier')
+const { Permissions } = require('discord.js')
+const { viewChannels, messageHistory, sendMessages } = require('../../../utils/discordPermissions.json')
 
 const serverId = config.serverId
 
 router.post('/', async (req, res) => {
   const { taskName } = req.body
   if (await isEmpty([taskName])) return res.status(400).json({ status: 'missing data' })
-  createRole(serverId, taskName)
-    .then(async role => {
-      createChannel.category(serverId, taskName, {
-        permission: [{
-          id: role.id,
-          allow: [
-            'VIEW_CHANNEL',
-            'SEND_MESSAGES',
-            'EMBED_LINKS',
-            'ATTACH_FILES',
-            'READ_MESSAGE_HISTORY',
-            'CONNECT',
-            'SPEAK'
-          ]
-        }]
-      })
-        .then(category => {
-          createChannel.text(serverId, 'avisos', {
-            parent: category.id,
-            permission: [{
-              id: role.id,
-              allow: [
-                'VIEW_CHANNEL',
-                'READ_MESSAGE_HISTORY'
-              ],
-              deny: ['SEND_MESSAGES']
-            }]
-          })
-          createChannel.text(serverId, 'geral', { parent: category.id })
-          createChannel.voice(serverId, 'voz', { parent: category.id })
-          return res.json({ status: true })
-        })
-        .catch(error => {
-          res.status(500).json({ error: error.message })
-          console.log(error)
-        })
+  try {
+    const permissions = new Permissions(3263488)
+    const taskRole = await createRole(serverId, taskName)
+    const taskCategory = await createChannel.category(serverId, taskName, {
+      permission: [{ id: taskRole.id, allow: permissions.toArray() }]
     })
-    .catch(error => {
-      res.status(500).json({ error: error.message })
-      console.log(error)
+    await createChannel.text(serverId, 'avisos', {
+      parent: taskCategory.id,
+      permission: [{ id: taskRole.id, allow: [viewChannels, messageHistory], deny: [sendMessages] }]
     })
+    await createChannel.text(serverId, 'geral', { parent: taskCategory.id })
+    await createChannel.voice(serverId, 'voz', { parent: taskCategory.id })
+    return res.json({ status: true })
+  } catch (error) {
+    res.status(500).json({ error: error.message })
+    console.log(error)
+  }
 })
 
 module.exports = router
