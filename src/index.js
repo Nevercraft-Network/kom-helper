@@ -10,6 +10,7 @@ const prefix = config.prefix
 
 const app = express()
 
+const routesV2 = require('./routesV2')
 const routes = require('./routes')
 const knex = require('./database/knex')
 const axios = require('axios')
@@ -18,6 +19,7 @@ app.get('/', (req, res) => {
   res.json('Hello!')
 })
 
+app.use('/v2', routesV2)
 app.use('/', routes)
 
 client.on('ready', async () => {
